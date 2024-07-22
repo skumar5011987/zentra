@@ -1,13 +1,25 @@
 import './App.css';
-import Login from './Components/Login.js';
-import Register from './Components/Register.js'
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import Navbar from './Components/Navbar';
+import Signin from './pages/signin';
+import Signup from './pages/signup';
+
 
 function App() {
   return (
-    <div className="text-center">
-    <Register/>
-    <Login/>
-    </div>
+    <>
+      <Router>
+        <Navbar />
+        <Routes>
+        <Route path="/" element={<Signin/>} />
+          <Route path="/signin" element={<Signin/>} />
+          <Route path="/signup" element={<Signup/>} />
+        </Routes>
+      </Router>
+
+    </>
   );
 }
 
