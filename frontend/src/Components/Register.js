@@ -1,5 +1,5 @@
 import React from 'react'
-import { TextField, Button } from '@mui/material';
+import { TextField, Button , Link} from '@mui/material';
 
 export default function Register() {
     return (
@@ -7,6 +7,9 @@ export default function Register() {
         <div className="container text-center">
             <div className='mt-3'>
                 <TextField id="email" label="Email" type="email" name="email" variant='outlined' />
+            </div>
+            <div className='mt-3'>
+                <TextField id="username" label="User Name" type="text" name="username" variant='outlined' />
             </div>
             <div className='mt-3'>
                 <TextField id="first_name" label="First Name" type="text" name="first_name" variant="outlined" />
@@ -17,8 +20,9 @@ export default function Register() {
             <div className='mt-3'>
                 <TextField id="password" label="Password" type="password" name="password" variant='outlined' />
             </div>
+            <Link href="#">Already registerd? Sign-in</Link>
             <div className="mt-3">
-                <Button variant="contained" > Register</Button>
+                <Button variant="contained" > Sign-up</Button>
             </div>
         </div>
         </>
