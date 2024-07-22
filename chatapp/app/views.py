@@ -32,12 +32,40 @@ class RegisterAPIView(APIView):
         
 class InterestsAPIView(APIView):
     def get(self, request):
-        pass
+        user = request.user
+        try:
+            interests = Interest.objects.filter(user=user, accepted=False)
+            serializer = InterestSerializer(data=interests, many=True)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(f"Something gone wrong. error:{e}")
+            return Response(data={})
+        
     def post(self, request):
-        pass
+        data = request.data
+        sender = request.user
+        receiver_id = data.get('receiver_id')
+        try:
+            receiver = User.objects.get(id=receiver_id)
+            serializer = InterestSerializer(data=data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(data = serializer.data, status=status.HTTP_200_OK)
+            
+        except User.DoesNotExist:
+            return Response({"error":"Receiver DoesNotExist"}, status=status.HTTP_400_BAD_REQUEST)
     
     def put(self, request):
-        pass
+        data = request.data
+        user = request.user
+        interest_id = data.get('interest_id')
+        try:
+            interest = Interest.objects.get(id=interest_id)
+            interest.accepted = True
+            interest.save()
+            return Response(status=status.HTTP_200_OK)
+        except Interest.DoesNotExist:
+            return Response({"error":"Interest DoesNotExist"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MessagesAPIView(APIView):
