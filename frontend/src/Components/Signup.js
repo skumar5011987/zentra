@@ -1,7 +1,7 @@
 import React from 'react'
 import { TextField, Button , Link} from '@mui/material';
 
-export default function Register() {
+export default function Signup() {
     return (
         <>
         <div className="container text-center">
@@ -22,7 +22,7 @@ export default function Register() {
             </div>
             <Link href="#">Already registerd? Sign-in</Link>
             <div className="mt-3">
-                <Button variant="contained" > Sign-up</Button>
+                <Button variant="contained" >Sign-up</Button>
             </div>
         </div>
         </>

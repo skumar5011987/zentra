@@ -1,7 +1,7 @@
 import React from 'react';
 import {TextField,Button, Link} from '@mui/material';
 
-export default function Login() {
+export default function Signin() {
     return (
         <>
             <div className="container text-center">
