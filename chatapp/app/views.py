@@ -35,7 +35,7 @@ class InterestsAPIView(APIView):
         user = request.user
         try:
             interests = Interest.objects.filter(user=user, accepted=False)
-            serializer = InterestSerializer(data=interests, many=True)
+            serializer = InterestSerializer(interests, many=True)
             return Response(data=serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             print(f"Something gone wrong. error:{e}")
@@ -66,12 +66,46 @@ class InterestsAPIView(APIView):
             return Response(status=status.HTTP_200_OK)
         except Interest.DoesNotExist:
             return Response({"error":"Interest DoesNotExist"}, status=status.HTTP_400_BAD_REQUEST)
+    
+    def delete(self, request):
+        interest_id = request.data.get('interest_id')
+        try:
+            interest = interest = Interest.objects.get(d=interest_id)
+            interest.delete()
+            return Response(status=status.HTTP_204_NO_CONTENT)
+        except Interest.DoesNotExist as e:
+            print(f"error: {e}")
+            return Response({"error":"Interest DoesNotExist"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class MessagesAPIView(APIView):
     
     def get(self, request):
-        pass
+        data = request.GET
+        user = request.user
+        receiver_id = data.get("receiver_id")
+        if not receiver_id:
+            raise Exception(f"Receiver is required")
+        try:
+            receiver = User.objects.get(id=receiver_id)
+            messages = Message.objects.filter(sender=user, receiver=receiver)
+            serializer = MessageSerializer(data=messages, many=True)
+            return Response(data=serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(f"error:{e}")
+            return Response(data={}, status=status.HTTP_400_BAD_REQUEST)
     
     def post(self, request):
-        pass
+        data = request.data
+        user = request.user
+        receiver_id = data.get("receiver_id")
+        if not receiver_id:
+            raise Exception(f"Receiver is is required")
+        try:
+            serializer = MessageSerializer(data=data, many=True)
+            if serializer.is_valid():
+                serializer.save(sender=user)
+                return Response(data=serializer.data, status=status.HTTP_200_OK)
+        except Exception as e:
+            print(f"error:{e}")
+            return Response(data={}, status=status.HTTP_400_BAD_REQUEST)
