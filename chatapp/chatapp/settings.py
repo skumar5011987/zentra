@@ -26,6 +26,14 @@ SECRET_KEY = 'django-insecure-v4r-s0!2*rq=$omur2-+k)%c3lzd#0^)8((i-k!wjg)p5mtm8z
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+CORS_ALLOW_ALL_ORIGINS=True
+CORS_ALLOW_METHODS = (
+    "DELETE",
+    "GET",
+    "PATCH",
+    "POST",
+    "PUT",
+)
 ALLOWED_HOSTS = []
 
 
@@ -39,7 +47,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'daphne',
     'django.contrib.staticfiles',
+    "corsheaders",
     'rest_framework',
+    'rest_framework_simplejwt.token_blacklist',
     'app',
     'channels',
 ]
@@ -48,13 +58,17 @@ ASGI_APPLICATION = 'chatapp.asgi.application'
 
 CHANNEL_LAYERS = {
     'default': {
-        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
     },
 }
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -90,7 +104,7 @@ REST_FRAMEWORK = {
 
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60*6),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+    'BLACKLIST_AFTER_ROTATION': True,
 }
 
 # Database
