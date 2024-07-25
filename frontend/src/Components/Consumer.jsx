@@ -49,7 +49,7 @@ export default function Consumer(props) {
             <div className="card m-2 rounded-pill border-2 border-success shadow  " style={{ "maxWidth": "400px", "maxHeight": "80px" }}>
                 <div className="row m-0 p-0 g-0">
                     <div className="col-md-2 d-flex justify-content-center align-items-center">
-                        <i className="m-2 fa-regular fa-circle-user fa-2x text-secondary"></i>
+                        <i className="m-2 fa-solid fa-circle-user fa-2x text-secondary"></i>
                     </div>
                     <div className="col-md-8">
                         <div className="card-body p-0 m-0">

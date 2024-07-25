@@ -12,17 +12,17 @@ const ChatBox = ({ selectedFriend }) => {
     const user = JSON.parse(localStorage.getItem('user'));
     const receiver = selectedFriend?.username
     const sender = user?.username
-    const friendName = selectedFriend?.first_name + ' ' + selectedFriend?.last_name
+    const me="you"
 
-    console.log("Connected Frient",selectedFriend)
-    useEffect (()=>{
-        if(!token){
+    console.log("Connected Frient", selectedFriend)
+    useEffect(() => {
+        if (!token) {
             localStorage.removeItem("refresh_token")
             localStorage.removeItem("user")
             navigate('/signin')
         }
-    },[token])
-    
+    }, [token])
+
 
     useEffect(() => {
         if (selectedFriend) {
@@ -36,7 +36,7 @@ const ChatBox = ({ selectedFriend }) => {
             ws.current.onmessage = (event) => {
                 const data = JSON.parse(event.data);
                 if (data.message) {
-                    setMessages(prevMessages => [...prevMessages, data.message]);
+                    setMessages(prevMessages => [...prevMessages, data]);
                     console.log('WebSocket message received:', data);
                 }
             };
@@ -48,13 +48,16 @@ const ChatBox = ({ selectedFriend }) => {
             ws.current.onerror = function (e) {
                 console.error('WebSocket error:', e);
             };
-            return () => { ws.current.close() };
+            return () => {
+                if (ws.current) {
+                    ws.current.close();
+                }
+            };
         }
-    }, [selectedFriend]);
+    }, [selectedFriend, sender, receiver]);
 
 
     const sendMessage = () => {
-        debugger
         if (newMessage) {
             const message = {
                 'message': newMessage,
@@ -68,24 +71,25 @@ const ChatBox = ({ selectedFriend }) => {
 
     useEffect(() => {
         chatBoxRef.current.scrollTop = chatBoxRef.current.scrollHeight;
-        console.log("Mwssages:", messages)
+        console.log("Messages sc:", messages)
     }, [messages]);
 
     return (
         <div className="mt-4">
             <div className="row justify-content-center">
                 <div className="col-md-12">
-                    <h5 className='card-title text-end px-2'>{selectedFriend ? selectedFriend.first_name +' '+ selectedFriend.last_name : ''}</h5>
+                    <h5 className='card-title text-end px-2'>{selectedFriend ? selectedFriend.first_name + ' ' + selectedFriend.last_name : ''}</h5>
                     <div className="card">
                         <div className="card-body" style={{ height: '420px', overflowY: 'auto' }} ref={chatBoxRef}>
                             {messages.map((msg, index) => (
                                 <div key={index} className="mb-3">
                                     <div className="d-flex justify-content-between">
-                                        <strong>{msg.sender}</strong>
-                                        {/* <span className="text-muted">{new Date(msg.timestamp).toLocaleTimeString()}</span> */}
+                                        <strong className="ms-1">{msg.sender.username==user.username? me : msg.sender.username}</strong>
+                                        <span className="text-muted me-1">{new Date(msg.timestamp).toLocaleTimeString() }</span>
                                     </div>
-                                    <div className="p-2 bg-light border rounded">
-                                        {msg}
+                                    
+                                    <div className="p-2 bg-light border rounded-2">
+                                        {msg.message}
                                     </div>
                                 </div>
                             ))}
@@ -95,12 +99,12 @@ const ChatBox = ({ selectedFriend }) => {
                                 <div className="input-group">
                                     <input
                                         type="text"
-                                        className="form-control"
+                                        className="form-control rounded-pill"
                                         placeholder="Type a message..."
                                         value={newMessage}
                                         onChange={(e) => setNewMessage(e.target.value)}
                                     />
-                                    <button className="btn btn-success" type="button" onClick={sendMessage}>Send</button>
+                                    <button className="btn btn-success rounded-pill mx-1" type="button" onClick={sendMessage}>Send</button>
                                 </div>
                             </form>
                         </div>
