@@ -1,17 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState} from 'react';
+
 
 const OnlineStatus = () => {
     const [onlineUsers, setOnlineUsers] = useState([]);
+    const token = localStorage.getItem("access_token")
+    const user = localStorage.getItem("user")
+    const headers = {'Authorization': 'Bearer ' + token}
+
+    
 
     useEffect(() => {
-        const ws = new WebSocket(
-            'ws://'
-            + window.location.host
-            +'/ws/'
-            +'online_users/'
-        );
-        ws.onopen =(e)=>{
-            console.log("Online User WS Connecttion Opened.")
+        const ws = new WebSocket(`ws://localhost:8000/ws/online_users/`);
+        ws.onopen = (e) => {
+            ws.send(JSON.stringify({ headers: headers}));
+            console.log("Online User WS Connecttion Opened.", e)
         }
         ws.onmessage = (event) => {
             const data = JSON.parse(event.data);
@@ -28,9 +30,9 @@ const OnlineStatus = () => {
             console.log('WebSocket connection closed');
         };
 
-        // return () => {
-        //     ws.close();
-        // };
+        return () => {
+            ws.close();
+        };
     }, []);
 
     return onlineUsers;
