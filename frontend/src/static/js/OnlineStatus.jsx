@@ -12,7 +12,6 @@ const OnlineStatus = () => {
     useEffect(() => {
         const ws = new WebSocket(`ws://localhost:8000/ws/online_users/`);
         ws.onopen = (e) => {
-            ws.send(JSON.stringify({ headers: headers}));
             console.log("Online User WS Connecttion Opened.", e)
         }
         ws.onmessage = (event) => {
