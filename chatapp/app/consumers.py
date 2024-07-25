@@ -10,7 +10,7 @@ User = get_user_model()
 
 
 class ChatConsumer(WebsocketConsumer):
-    
+
     def connect(self):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = f'chat_{self.room_name}'
@@ -69,7 +69,6 @@ class ChatConsumer(WebsocketConsumer):
             'timestamp': timestamp
         }))
 
-    
     def save_message(self, sender, receiver, message):
         return Message.objects.create(
             sender=sender,
@@ -79,13 +78,13 @@ class ChatConsumer(WebsocketConsumer):
 
     def parse_user_object(self, obj):
         return {
-            "id":obj.id,
-            "first_name":obj.first_name,
-            "last_name":obj.last_name,
-            "email":obj.email,
-            "username":obj.username,
+            "id": obj.id,
+            "first_name": obj.first_name,
+            "last_name": obj.last_name,
+            "email": obj.email,
+            "username": obj.username,
         }
-        
+
     def fetch_chat_history(self, room_name):
         user1_username, user2_username = room_name.split('_')
         user1 = User.objects.get(username=user1_username)
@@ -95,28 +94,28 @@ class ChatConsumer(WebsocketConsumer):
             (Q(sender=user2) & Q(receiver=user1))
         ).order_by('timestamp')
 
-    
     def get_user(self, username):
         return User.objects.get(username=username)
 
-    
     def get_current_timestamp(self):
         from django.utils import timezone
         return timezone.now()
 
+
 class ConsumerStatus(WebsocketConsumer):
-    
     def connect(self):
         user = self.scope['user']
-        
-        if user.is_authenticated:
-            database_sync_to_async(UserProfile.objects.filter(user=user).update(is_online=True))
-            
-            self.channel_layer.group_add(
+        print("Scope User:", user.username if user.is_authenticated else "Anonymous")
+
+        if user and user.is_authenticated:
+            print("User is authenticated")
+            UserProfile.objects.filter(user=user).update(is_online=True)
+
+            async_to_sync(self.channel_layer.group_add)(
                 "online_users",
                 self.channel_name
             )
-            self.channel_layer.group_send(
+            async_to_sync(self.channel_layer.group_send)(
                 "online_users",
                 {
                     'type': 'user_status',
@@ -124,14 +123,20 @@ class ConsumerStatus(WebsocketConsumer):
                     'is_online': True
                 }
             )
+            print(f"User {user.username} added to online_users group")
+
         self.accept()
 
     def disconnect(self, close_code):
         user = self.scope['user']
-        if user.is_authenticated:
-            database_sync_to_async(UserProfile.objects.filter(user=user).update(is_online=True))
+        print("Disconnect User:",
+                user.username if user.is_authenticated else "Anonymous")
 
-            self.channel_layer.group_send(
+        if user.is_authenticated:
+            print("User is authenticated")
+            UserProfile.objects.filter(user=user).update(is_online=False)
+
+            async_to_sync(self.channel_layer.group_send)(
                 "online_users",
                 {
                     'type': 'user_status',
@@ -139,13 +144,14 @@ class ConsumerStatus(WebsocketConsumer):
                     'is_online': False
                 }
             )
-            self.channel_layer.group_discard(
+            async_to_sync(self.channel_layer.group_discard)(
                 "online_users",
                 self.channel_name
             )
-            
+            print(f"User {user.username} removed from online_users group")
 
     def user_status(self, event):
+        print('Event:', event)
         self.send(text_data=json.dumps({
             'user_id': event['user_id'],
             'is_online': event['is_online']
