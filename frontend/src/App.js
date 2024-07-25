@@ -5,6 +5,8 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from './Components/Navbar';
 import Signin from './pages/signin';
 import Signup from './pages/signup';
+import Chatroom from './pages/chatroom';
+import PendingRequestes from './pages/Pending';
 
 
 function App() {
@@ -16,9 +18,10 @@ function App() {
         <Route path="/" element={<Signin/>} />
           <Route path="/signin" element={<Signin/>} />
           <Route path="/signup" element={<Signup/>} />
+          <Route path="/room" element={<Chatroom/>}/>
+          <Route path="/notifications" element={<PendingRequestes/>}/>
         </Routes>
       </Router>
-
     </>
   );
 }
