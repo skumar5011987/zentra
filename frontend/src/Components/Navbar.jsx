@@ -16,12 +16,14 @@ function Navbar() {
             const resp = await axios.post('http://localhost:8000/api/signout/', { refresh_token }, {
                 headers: headers,
             });
+            
+        } catch (error){
+            console.log("logout:", error.response?.data);
+        } finally {
             localStorage.removeItem('access_token');
             localStorage.removeItem('refresh_token');
             localStorage.removeItem('user');
             navigate('/signin');
-        } catch (error){
-            console.log("Unable to logout:", error.response?.data);
         }
     };
 
@@ -44,7 +46,7 @@ function Navbar() {
                                     <span className="nav-link">Welcome, {user.username?.toUpperCase()}</span>
                                 </li>
                                 <li className="nav-item">
-                                    <Link className="nav-link" to="/notifications" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Notifications"><i className="fa-regular fa-comment text-primary"></i></Link>
+                                    <Link className="nav-link" to="/notifications" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Invites"><i class="fa-regular fa-bell"></i></Link>
                                 </li>
                                 <li className="nav-item">
                                     <Link className="nav-link" onClick={handleLogout}>Logout</Link>
