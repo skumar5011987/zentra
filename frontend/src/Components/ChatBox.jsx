@@ -54,7 +54,7 @@ const ChatBox = ({ selectedFriend }) => {
                 }
             };
         }
-    }, [selectedFriend, sender, receiver]);
+    }, [selectedFriend]);
 
 
     const sendMessage = () => {

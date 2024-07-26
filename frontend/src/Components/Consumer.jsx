@@ -46,10 +46,10 @@ export default function Consumer(props) {
 
     return (
         <>
-            <div className="card m-2 rounded-pill border-2 border-success shadow  " style={{ "maxWidth": "400px", "maxHeight": "80px" }}>
+            <div className="card m-2 rounded-pill border-2 border-success shadow" style={{ "maxWidth": "400px", "maxHeight": "80px" }}>
                 <div className="row m-0 p-0 g-0">
                     <div className="col-md-2 d-flex justify-content-center align-items-center">
-                        <i className="m-2 fa-solid fa-circle-user fa-2x text-secondary"></i>
+                        {props.online ?<i className="m-2 fa-solid fa-circle-user fa-2x text-success"></i> : <i className="m-2 fa-solid fa-circle-user fa-2x text-secondary"></i>}
                     </div>
                     <div className="col-md-8">
                         <div className="card-body p-0 m-0">
@@ -60,18 +60,18 @@ export default function Consumer(props) {
                     <div className='col-md-2 d-flex justify-content-end align-items-center'>
                         {
                             props.friend ? (
-                                <div className="d-flex">{}
-                                    <i className="mx-3 fa-regular fa-comments text-success"></i>
+                                <div className="d-flex hover" >{}
+                                    <i className="mx-3 fa-regular fa-comments text-success" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Start Chat"></i>
                                 </div>
                             ) : props.requesteR ? (
                                 <div className="d-flex">
-                                    <i className="me-3 fa-regular fa-circle-check text-success" onClick={() => acceptInterest(props.vals.id)}></i>
-                                    <i className="me-3 fa-regular fa-trash-can text-danger" onClick={() => cancelInterest(props.vals.id)}></i>
+                                    <i className="me-3 fa-regular fa-circle-check text-success" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Accept Invite" onClick={() => acceptInterest(props.vals.id)}></i>
+                                    <i className="me-3 fa-regular fa-trash-can text-danger" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Reject Invite" onClick={() => cancelInterest(props.vals.id)}></i>
                                 </div>
                             ): props?.requesteS ? (
-                                <i className="me-3 fa-regular fa-trash-can text-danger" onClick={() => cancelInterest(props.vals.id)}></i>
+                                <i className="me-3 fa-regular fa-trash-can text-danger" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Cancle Invite" onClick={() => cancelInterest(props.vals.id)}></i>
                             ) : (
-                                <i className="mx-3 fa-regular fa-paper-plane text-primary" onClick={() => sendInterest(props.vals.id)}></i>
+                                <i className="mx-3 fa-regular fa-paper-plane text-primary" role="button" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Send Invite" onClick={() => sendInterest(props.vals.id)}></i>
                             )
                         }
                     </div>
