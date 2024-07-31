@@ -17,6 +17,7 @@ export default function Chatroom() {
     let headers = { 'Authorization': 'Bearer ' + token };
     const onlineUsers = OnlineStatus();
 
+    console.log("Online hai:",onlineUsers)
     useEffect(() => {
         if (!token) {
             localStorage.removeItem('refresh_token');

@@ -46,7 +46,7 @@ function Navbar() {
                                     <span className="nav-link">Welcome, {user.username?.toUpperCase()}</span>
                                 </li>
                                 <li className="nav-item">
-                                    <Link className="nav-link" to="/notifications" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Invites"><i class="fa-regular fa-bell"></i></Link>
+                                    <Link className="nav-link" to="/notifications" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Invites"><i className="fa-regular fa-bell"></i></Link>
                                 </li>
                                 <li className="nav-item">
                                     <Link className="nav-link" onClick={handleLogout}>Logout</Link>
