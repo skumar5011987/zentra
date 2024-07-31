@@ -34,7 +34,7 @@ CORS_ALLOW_METHODS = (
     "POST",
     "PUT",
 )
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -48,10 +48,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     
+    'channels',
     "corsheaders",
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
-    'channels',
     
     'app',
 ]
@@ -105,7 +105,7 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60*6),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=60),
     'BLACKLIST_AFTER_ROTATION': True,
 }
 

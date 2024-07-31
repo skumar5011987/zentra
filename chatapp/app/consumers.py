@@ -105,21 +105,23 @@ class ChatConsumer(WebsocketConsumer):
 class ConsumerStatus(WebsocketConsumer):
     def connect(self):
         user = self.scope['user']
-        print("Scope User:", user.username if user.is_authenticated else "Anonymous")
+        
 
         if user and user.is_authenticated:
-            print("User is authenticated")
-            UserProfile.objects.filter(user=user).update(is_online=True)
+            
+            async_to_sync(self.update_user_status)(user, True)
 
             async_to_sync(self.channel_layer.group_add)(
                 "online_users",
                 self.channel_name
             )
+            online_users = async_to_sync(self.online_user_ids)()
+            print("online_users",online_users)
             async_to_sync(self.channel_layer.group_send)(
                 "online_users",
                 {
                     'type': 'user_status',
-                    'user_id': user.id,
+                    'user_ids': online_users,
                     'is_online': True
                 }
             )
@@ -133,15 +135,16 @@ class ConsumerStatus(WebsocketConsumer):
                 user.username if user.is_authenticated else "Anonymous")
 
         if user.is_authenticated:
-            print("User is authenticated")
-            UserProfile.objects.filter(user=user).update(is_online=False)
+            async_to_sync(self.update_user_status)(user, False)
 
+            online_users = async_to_sync(self.online_user_ids)()
+            print("online_users",online_users)
             async_to_sync(self.channel_layer.group_send)(
                 "online_users",
                 {
                     'type': 'user_status',
-                    'user_id': user.id,
-                    'is_online': False
+                    'user_ids': online_users,
+                    'is_online': True
                 }
             )
             async_to_sync(self.channel_layer.group_discard)(
@@ -153,10 +156,17 @@ class ConsumerStatus(WebsocketConsumer):
     def user_status(self, event):
         print('Event:', event)
         self.send(text_data=json.dumps({
-            'user_id': event['user_id'],
-            'is_online': event['is_online']
+            'user_ids': event['user_ids'],
+            'is_online': True
         }))
 
     @database_sync_to_async
     def update_user_status(self, user, is_online):
-        UserProfile.objects.filter(user=user).update(is_online=is_online)
+        obj, created = UserProfile.objects.get_or_create(user=user)
+        obj.is_online = is_online
+        obj.save()
+    
+    @database_sync_to_async
+    def online_user_ids(self):
+        ids = list(UserProfile.objects.filter(is_online=True).values_list("user_id", flat=True))
+        return ids
