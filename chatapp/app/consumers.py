@@ -15,24 +15,19 @@ class ChatConsumer(WebsocketConsumer):
         self.room_name = self.scope['url_route']['kwargs']['room_name']
         self.room_group_name = f'chat_{self.room_name}'
 
-        self.channel_layer.group_add(
+        async_to_sync(self.channel_layer.group_add)(
             self.room_group_name,
             self.channel_name
         )
 
         self.accept()
 
-        messages = self.fetch_chat_history(self.room_name)
+        messages = async_to_sync(self.fetch_chat_history)(self.room_name)
         for message in messages:
-            self.send(text_data=json.dumps({
-                'message': message.message,
-                'sender': self.parse_user_object(message.sender),
-                'receiver': self.parse_user_object(message.receiver),
-                'timestamp': str(message.timestamp)
-            }))
+            self.send(text_data=self.parse_msg_josn(message))
 
     def disconnect(self, close_code):
-        self.channel_layer.group_discard(
+        async_to_sync(self.channel_layer.group_discard)(
             self.room_group_name,
             self.channel_name
         )
@@ -43,32 +38,36 @@ class ChatConsumer(WebsocketConsumer):
         sender_username = json_data['sender']
         receiver_username = json_data['receiver']
 
-        sender = self.get_user(sender_username)
-        receiver = self.get_user(receiver_username)
+        sender = async_to_sync(self.get_user)(sender_username)
+        receiver = async_to_sync(self.get_user)(receiver_username)
 
-        self.save_message(sender, receiver, message)
-
-        self.channel_layer.group_send(
+        async_to_sync(self.save_message)(sender, receiver, message)
+        
+        async_to_sync(self.channel_layer.group_send)(
             self.room_group_name,
             {
                 'type': 'chat_message',
                 'message': message,
-                'sender': sender.username,
-                'timestamp': str(self.get_current_timestamp())
+                'sender': self.parse_user_object(sender),
+                'receiver': self.parse_user_object(receiver),
+                'timestamp': str(self.get_current_timestamp()),
             }
         )
 
     def chat_message(self, event):
         message = event['message']
         sender = event['sender']
+        receiver = event['receiver']
         timestamp = event['timestamp']
 
         self.send(text_data=json.dumps({
             'message': message,
             'sender': sender,
+            'receiver': receiver,
             'timestamp': timestamp
         }))
 
+    @database_sync_to_async
     def save_message(self, sender, receiver, message):
         return Message.objects.create(
             sender=sender,
@@ -76,6 +75,14 @@ class ChatConsumer(WebsocketConsumer):
             message=message
         )
 
+    def parse_msg_josn(self, msg):
+        return json.dumps({
+            'message': msg.message,
+            'sender': self.parse_user_object(msg.sender),
+            'receiver': self.parse_user_object(msg.receiver),
+            'timestamp': str(msg.timestamp)
+        })
+    
     def parse_user_object(self, obj):
         return {
             "id": obj.id,
@@ -85,6 +92,7 @@ class ChatConsumer(WebsocketConsumer):
             "username": obj.username,
         }
 
+    @database_sync_to_async
     def fetch_chat_history(self, room_name):
         user1_username, user2_username = room_name.split('_')
         user1 = User.objects.get(username=user1_username)
@@ -94,6 +102,7 @@ class ChatConsumer(WebsocketConsumer):
             (Q(sender=user2) & Q(receiver=user1))
         ).order_by('timestamp')
 
+    @database_sync_to_async
     def get_user(self, username):
         return User.objects.get(username=username)
 
