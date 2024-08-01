@@ -1,10 +1,10 @@
 
-import React, { useState, useEffect } from 'react'
-import { useNavigate, } from 'react-router-dom'
-import Consumer from '../Components/Consumer'
-import ChatBox from '../Components/ChatBox'
+import React, { useState, useEffect } from 'react';
+import { useNavigate, } from 'react-router-dom';
+import Consumer from '../Components/Consumer';
+import ChatBox from '../Components/ChatBox';
 import OnlineStatus from '../static/js/OnlineStatus';
-import axios from 'axios'
+import axios from 'axios';
 
 
 export default function Chatroom() {
@@ -34,7 +34,7 @@ export default function Chatroom() {
     const getUsers = async () => {
         try {
 
-            let response = await axios.get('http://localhost:8000/api/users/', {
+            let response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/users/`, {
                 headers: headers,
             });
             setUsers(response.data);
@@ -45,7 +45,7 @@ export default function Chatroom() {
     const getFriends = async () => {
 
         try {
-            let response = await axios.get('http://localhost:8000/api/friends/', { headers });
+            let response = await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/friends/`, { headers });
             setFriends(response.data)
         } catch (error) {
             console.log("Error getting users:", error.response?.data)
@@ -53,7 +53,7 @@ export default function Chatroom() {
     }
     const getRequested = async () => {
         try {
-            let resp = await axios.get('http://localhost:8000/api/requested/', {
+            let resp = await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/requested/`, {
                 headers: headers,
             })
             setRequested(resp.data);

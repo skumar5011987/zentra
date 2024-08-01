@@ -8,7 +8,7 @@ export default function Consumer(props) {
 
     const sendInterest = async (receiver) => {
         try {
-            const response = await axios.post('http://localhost:8000/api/interests/', { receiver }, {
+            const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/interests/`, { receiver }, {
                 headers: headers
             });
             console.log("Interest sent response:", response.data)
@@ -20,7 +20,7 @@ export default function Consumer(props) {
     const cancelInterest = async (interest_id) => {
         try {
             ;
-            const response = await axios.delete('http://localhost:8000/api/interests/', {
+            const response = await axios.delete(`${process.env.REACT_APP_BACKEND_URL}api/interests/`, {
                 headers: {
                     'Authorization': 'Bearer ' + token,
                 },
@@ -35,7 +35,7 @@ export default function Consumer(props) {
     }
     const acceptInterest = async (interest_id) => {
         try {
-            const response = await axios.put('http://localhost:8000/api/interests/', { interest_id }, {
+            const response = await axios.put(`${process.env.REACT_APP_BACKEND_URL}api/interests/`, { interest_id }, {
                 headers: headers
             });
 

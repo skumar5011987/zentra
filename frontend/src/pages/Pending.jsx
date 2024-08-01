@@ -15,7 +15,7 @@ export default function PendingRequestes() {
     const getRequested = async () => {
         try {
             ;
-            let resp = await axios.get('http://localhost:8000/api/requested/', {
+            let resp = await axios.get(`${process.env.REACT_APP_BACKEND_URL}api/requested/`, {
                 headers: headers,
             })
             console.log("req:", resp)

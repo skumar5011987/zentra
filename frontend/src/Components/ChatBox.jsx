@@ -84,7 +84,7 @@ const ChatBox = ({ selectedFriend }) => {
                             {messages.map((msg, index) => (
                                 <div key={index} className="mb-3">
                                     <div className="d-flex justify-content-between">
-                                        <strong className="ms-1">{msg.sender.username==user.username? me : msg.sender.username}</strong>
+                                        <strong className="ms-1">{msg.sender.username===user.username? me : msg.sender.username}</strong>
                                         <span className="text-muted me-1">{new Date(msg.timestamp).toLocaleTimeString() }</span>
                                     </div>
                                     

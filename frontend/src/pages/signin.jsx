@@ -18,7 +18,7 @@ function Signin() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:8000/api/token/', { username, password });
+            const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/token/`, { username, password });
             const token = response.data.access;
             const decoded = jwtDecode(token);
             console.log("decoded",decoded)
@@ -26,7 +26,7 @@ function Signin() {
             localStorage.setItem('refresh_token', response.data.refresh);
             let headers = {'Authorization': `Bearer ${token}`}
             const resp = await axios.get(
-                'http://localhost:8000/api/users/' ,{
+                `${process.env.REACT_APP_BACKEND_URL}api/users/` ,{
                     headers: headers,
                     params: { user_id: decoded.user_id }
                 }

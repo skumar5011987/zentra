@@ -2,7 +2,6 @@ import axios from 'axios';
 // import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 
-
 function Navbar() {
     const navigate = useNavigate()
     const user = JSON.parse(localStorage.getItem('user'));
@@ -12,7 +11,7 @@ function Navbar() {
 
     const handleLogout = async () => {
         try {
-            const resp = await axios.post('http://localhost:8000/api/signout/', { refresh_token }, {
+            const resp = await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/signout/`, { refresh_token }, {
                 headers: headers,
             });
 
