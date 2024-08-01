@@ -16,8 +16,8 @@ function Navbar() {
             const resp = await axios.post('http://localhost:8000/api/signout/', { refresh_token }, {
                 headers: headers,
             });
-            
-        } catch (error){
+
+        } catch (error) {
             console.log("logout:", error.response?.data);
         } finally {
             localStorage.removeItem('access_token');
@@ -27,6 +27,9 @@ function Navbar() {
         }
     };
 
+    const searchAndInvite = async ()=>{
+
+    }
 
     return (
         <>
@@ -39,7 +42,10 @@ function Navbar() {
                     <div className="collapse navbar-collapse" id="navbarNav">
                         {user ? (
                             <ul className="navbar-nav ms-auto">
-                            <li className="nav-item">
+                                <li className="nav-item">
+                                    <Link className="nav-link" onClick={searchAndInvite}>Search & Invite</Link>
+                                </li>
+                                <li className="nav-item">
                                     <Link className="nav-link" to="/">My Room</Link>
                                 </li>
                                 <li className="nav-item">
