@@ -46,14 +46,14 @@ export default function Consumer(props) {
 
     return (
         <>
-            <div className="card m-2 rounded-pill border-2 border-success shadow-sm" style={{ maxWidth: "100%", maxHeight: "100px" }}>
+            <div className="card m-2 rounded-pill border-2 border-success shadow-sm" style={{ maxWidth: "80%", maxHeight: "100px" }}>
                 <div className="row m-0 p-0 g-0">
-                    <div className="col-3 d-flex align-items-center">
+                    <div className="col-2 d-flex align-items-center">
                         {props.online
                             ? <i className="m-2 fa-solid fa-circle-user fa-2x text-success"></i>
                             : <i className="m-2 fa-solid fa-circle-user fa-2x text-secondary"></i>}
                     </div>
-                    <div className="col-7">
+                    <div className="col">
                         <div className="card-body p-1">
                             <p className="m-0 fs-8 d-none d-sm-block">{props.vals.first_name} {props.vals.last_name}</p>
                             <small className="text-muted fs-7 d-none d-md-block">{props.vals.username}</small>

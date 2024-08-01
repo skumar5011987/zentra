@@ -4,8 +4,8 @@ import { useEffect, useState, useRef } from 'react';
 const OnlineStatus = () => {
     const [onlineUsers, setOnlineUsers] = useState([]);
     const token = localStorage.getItem("access_token")
-    const user = localStorage.getItem("user")
-    const headers = {'Authorization': 'Bearer ' + token}
+    // const user = localStorage.getItem("user")
+    // const headers = {'Authorization': 'Bearer ' + token}
     const ws = useRef(null);
     
 
