@@ -12,18 +12,6 @@ export default function PendingRequestes() {
     const [requesteR, setRequesteR] = useState([])
     const [requesteS, setRequesteS] = useState([])
 
-
-    useEffect(() => {
-        if (!token) {
-            localStorage.removeItem('refresh_token');
-            localStorage.removeItem('user');
-            navigate("/signin");
-        }
-        else {
-            getRequested();
-        }
-    }, [token]);
-
     const getRequested = async () => {
         try {
             ;
@@ -41,8 +29,18 @@ export default function PendingRequestes() {
         }
     }
 
+    useEffect(() => {
+        if (!token) {
+            localStorage.removeItem('refresh_token');
+            localStorage.removeItem('user');
+            navigate("/signin");
+        }
+        else {
+            getRequested();
+        }
+    }, [token, getRequested]);
 
-
+    
 
     return (
         <div className="container justify-content-center align-content-center  mt-5">
