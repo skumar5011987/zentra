@@ -53,6 +53,7 @@ class GetUsersAPIView(APIView):
     def get(self, request):
         id = request.query_params.get('user_id')
         sender = request.user
+        query = request.query_params.get('query')
         try:
             if id:
                 user = User.objects.get(id=id)
@@ -67,6 +68,10 @@ class GetUsersAPIView(APIView):
 
                 users = User.objects.exclude(
                     Q(id__in=all_ids) | Q(id=sender.id))
+                
+                if query:
+                    users = users.filter(Q(username__icontains=query)|Q(first_name__icontains=query))
+                
                 serializer = UserSerializer(users, many=True)
                 return Response(data=serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
