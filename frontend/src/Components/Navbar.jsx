@@ -25,13 +25,13 @@ function Navbar() {
         }
     };
 
-    const searchAndInvite = async ()=>{
+    const searchAndInvite = async () => {
 
     }
 
     return (
         <>
-            <nav className="navbar navbar-expand-lg navbar-dark bg-dark text-whight" data-bs-theme="dark">
+            <nav className="navbar navbar-expand-sm bg-dark navbar-dark" data-bs-theme="dark">
                 <div className="container">
                     <Link className="navbar-brand fw-bolder" to="/">ChatApp</Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -60,36 +60,11 @@ function Navbar() {
                             <ul className="navbar-nav ms-auto">
                                 <li><Link className="nav-link" to="/signin">Sign-in</Link></li>
                                 <li><Link className="nav-link" to="/signup">Sign-up</Link></li>
-                                {/* <li className="nav-item dropdown">
-                            <Link className=" dropdown-toggle" to="" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                {UserName}
-                            </Link>
-                            <ul className="dropdown-menu">
-                                <li><hr className="dropdown-divider" /></li>
-                                <li><Link className="dropdown-item" to="/">Logout</Link></li>
-                            </ul>
-                        </li> */}
+
                             </ul>)}
                     </div>
                 </div>
             </nav>
-            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h5 className="modal-title" id="exampleModalLabel">Modal title</h5>
-                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div className="modal-body">
-                            ...
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                            <button type="button" className="btn btn-primary">Save changes</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </>
     )
 }
