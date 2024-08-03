@@ -41,7 +41,7 @@ function Navbar() {
                         {user ? (
                             <ul className="navbar-nav ms-auto">
                                 <li className="nav-item">
-                                    <Link className="nav-link" onClick={searchAndInvite}>Search & Invite</Link>
+                                    <Link className="nav-link" to="/inviteusers">Search & Invite</Link>
                                 </li>
                                 <li className="nav-item">
                                     <Link className="nav-link" to="/">My Room</Link>

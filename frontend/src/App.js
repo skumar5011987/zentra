@@ -7,6 +7,7 @@ import Signin from './pages/signin';
 import Signup from './pages/signup';
 import Chatroom from './pages/chatroom';
 import PendingRequestes from './pages/Pending';
+import InviteUsers from './pages/inviteusers';
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
           <Route path="/signup" element={<Signup/>} />
           <Route path="/room" element={<Chatroom/>}/>
           <Route path="/notifications" element={<PendingRequestes/>}/>
+          <Route path="/inviteusers" element={<InviteUsers/>}/>
         </Routes>
       </Router>
     </>
