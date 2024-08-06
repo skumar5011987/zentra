@@ -2,6 +2,8 @@
 import { Link, useNavigate, } from 'react-router-dom';
 import { useState } from 'react'
 import axios from 'axios';
+import alertify from 'alertifyjs';
+import 'alertifyjs/build/css/alertify.css';
 
 function Signup() {
     const [firstname, setFirstname] = useState('')
@@ -17,10 +19,11 @@ function Signup() {
             const response = await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/register/`,
                 { firstname, lastname, email, username, password });
             console.log("User:", response?.data)
-            
+            alertify.success("Registration Successfull!!")
             navigate('/signin')
         } catch (error) {
-            console.error('Sign up error:', error.response.data);
+            console.error('Sign up error:', error.response?.data);
+            alertify.error(error.response?.data?.error)
         }
 
     }

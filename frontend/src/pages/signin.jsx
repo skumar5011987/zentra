@@ -3,6 +3,8 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { jwtDecode } from "jwt-decode";
 import { Link } from 'react-router-dom';
+import alertify from 'alertifyjs';
+import 'alertifyjs/build/css/alertify.css';
 
 function Signin() {
     const navigate = useNavigate()
@@ -34,9 +36,11 @@ function Signin() {
             );
 
             localStorage.setItem(`user`, JSON.stringify(resp.data));
+            alertify.success("Login Successful!!.")
             navigate('/room');
         } catch (error) {
-            console.error('Logging in error:', error.response.data);
+            console.error('Logging in error:', error.response?.data);
+            alertify.error(error.response?.data?.detail)
         }
     };
     return (

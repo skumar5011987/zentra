@@ -1,6 +1,8 @@
 import axios from 'axios';
 // import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import alertify from 'alertifyjs';
+import 'alertifyjs/build/css/alertify.css';
 
 function Navbar() {
     const navigate = useNavigate()
@@ -14,9 +16,11 @@ function Navbar() {
             const resp = await axios.post(`${process.env.REACT_APP_BACKEND_URL}api/signout/`, { refresh_token }, {
                 headers: headers,
             });
+            alertify.success("Logout Successfull !!")
 
         } catch (error) {
             console.log("logout:", error.response?.data);
+            alertify.error("Something went wrong.")
         } finally {
             localStorage.removeItem('access_token');
             localStorage.removeItem('refresh_token');
@@ -33,7 +37,7 @@ function Navbar() {
         <>
             <nav className="navbar navbar-expand-sm bg-dark navbar-dark" data-bs-theme="dark">
                 <div className="container">
-                    <Link className="navbar-brand fw-bolder" to="/">ChatApp</Link>
+                    <Link className="navbar-brand fw-bolder" to="/">Zentra</Link>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
