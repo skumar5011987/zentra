@@ -52,7 +52,7 @@ INSTALLED_APPS = [
     "corsheaders",
     'rest_framework',
     'rest_framework_simplejwt.token_blacklist',
-    
+    'django_elasticsearch_dsl',
     'app',
 ]
 
@@ -102,6 +102,15 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+}
+ELASTIC_SERVER_URL = 'http://localhost:9200'
+ELASTIC_USERNAME = "elastic"
+ELASTIC_PASS = 'CdV176qjdNdZKKMSS+Wj'
+ELASTICSEARCH_DSL={
+    'default': {
+        'hosts': ELASTIC_SERVER_URL ,
+        'http_auth': (ELASTIC_USERNAME, ELASTIC_PASS),
+    }
 }
 
 SIMPLE_JWT = {
